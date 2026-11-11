@@ -59,7 +59,7 @@ async function FetchUp() {
 async function StartInit() {
   console.log("--------[ Setup Boomer ]-------")
   const times    = 1
-  const username = "backbenchersofucek"
+  const username = "backbenchersofucek1"
   data.username = username
   data.question =  "10 trillion billion hillion gillion dollor goh goh"
   setTime = times
