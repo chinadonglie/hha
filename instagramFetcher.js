@@ -11,7 +11,7 @@ async function getInstagramLink(username) {
     }
   );
 
-  if (!res.ok) throw new Error(`Failed to fetch profile: HTTP ${res.status}`);
+  if (!res.ok) return null;
 
   const json = await res.json();
   const externalUrl = json?.data?.user?.external_url;
