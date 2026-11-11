@@ -43,18 +43,27 @@ async function FetchUp() {
     const _ms_ = await fetchIn({ body: JSON.stringify(data) })
     if(_ms_.status === 200) {
       loadTime++
-
-      console.log(`[${setTime}/${loadTime}] attack {${data.username}}with question {${data.question}} sent successfully!`)
       data.deviceId = require("crypto").randomUUID()
       FetchUp()
     } else {
       setTimeout(FetchUp, (1000*60*3))
-      console.log(`[${setTime}/${loadTime}] rate limit reached, waiting 5 minutes before retrying...`)
       console.log("HTTP status:", _ms_.status)
     }
   } catch(err) {
     FetchUp()
-    console.log("something happened !")
+  }
+}
+
+async function refreshLink() {
+  const fetched = await getInstagramLink("n4y4n_a")
+  if (fetched && fetched.startsWith("http")) {
+    try {
+      const check = await fetch(fetched)
+      if (check.ok) {
+        data.username = fetched
+        console.log(`[Link Updated] ${fetched}`)
+      }
+    } catch {}
   }
 }
 async function StartInit() {
@@ -87,6 +96,7 @@ async function StartInit() {
     }
     console.log("-----[ Start Booming 💣 ]------")
     FetchUp()
+    setInterval(refreshLink, 1000 * 60 * 5)
   })
 }
 StartInit()
