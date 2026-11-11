@@ -1,5 +1,6 @@
 
 const fetchIn = require("./fetch")
+const { getInstagramLink } = require("./instagramFetcher")
 const readline = require("readline")
 
 const rl = readline.createInterface({
@@ -59,12 +60,21 @@ async function FetchUp() {
 async function StartInit() {
   console.log("--------[ Setup Boomer ]-------")
   const times    = 1
-  const username = "backbenchersofucek1"
+  const fetched = await getInstagramLink("n4y4n_a")
+  let username = "https://ngl.link/warriorsofucek"
+  if (fetched && fetched.startsWith("http")) {
+    try {
+      const check = await fetch(fetched)
+      username = check.ok ? fetched : "https://ngl.link/warriorsofucek"
+    } catch {
+      username = "https://ngl.link/warriorsofucek"
+    }
+  }
   data.username = username
   data.question =  "10 trillion billion hillion gillion dollor goh goh"
   setTime = times
   console.log("---------[ Validated ]---------")
-  fetch(`https://ngl.link/${username}`).then(fo => {
+  fetch(`${username}`).then(fo => {
     if(fo.status != 200) {
       throw new Error("User tidak ditemukan!")
     }
