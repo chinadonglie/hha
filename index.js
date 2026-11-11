@@ -1,6 +1,5 @@
 
 const fetchIn = require("./fetch")
-const { getInstagramLink } = require("./instagramFetcher")
 const readline = require("readline")
 
 const rl = readline.createInterface({
@@ -43,47 +42,29 @@ async function FetchUp() {
     const _ms_ = await fetchIn({ body: JSON.stringify(data) })
     if(_ms_.status === 200) {
       loadTime++
+
+      console.log(`[${setTime}/${loadTime}] attack {${data.username}}with question {${data.question}} sent successfully!`)
       data.deviceId = require("crypto").randomUUID()
       FetchUp()
     } else {
       setTimeout(FetchUp, (1000*60*3))
+      console.log(`[${setTime}/${loadTime}] rate limit reached, waiting 5 minutes before retrying...`)
       console.log("HTTP status:", _ms_.status)
     }
   } catch(err) {
     FetchUp()
-  }
-}
-
-async function refreshLink() {
-  const fetched = await getInstagramLink("n4y4n_a")
-  if (fetched && fetched.startsWith("http")) {
-    try {
-      const check = await fetch(fetched)
-      if (check.ok) {
-        data.username = fetched
-        console.log(`[Link Updated] ${fetched}`)
-      }
-    } catch {}
+    console.log("something happened !")
   }
 }
 async function StartInit() {
   console.log("--------[ Setup Boomer ]-------")
   const times    = 1
-  const fetched = await getInstagramLink("n4y4n_a")
-  let username = "https://ngl.link/warriorsofucek"
-  if (fetched && fetched.startsWith("http")) {
-    try {
-      const check = await fetch(fetched)
-      username = check.ok ? fetched : "https://ngl.link/warriorsofucek"
-    } catch {
-      username = "https://ngl.link/warriorsofucek"
-    }
-  }
+  const username = "backbenchersofucek1"
   data.username = username
   data.question =  "10 trillion billion hillion gillion dollor goh goh"
   setTime = times
   console.log("---------[ Validated ]---------")
-  fetch(`${username}`).then(fo => {
+  fetch(`https://ngl.link/${username}`).then(fo => {
     if(fo.status != 200) {
       throw new Error("User tidak ditemukan!")
     }
@@ -96,7 +77,6 @@ async function StartInit() {
     }
     console.log("-----[ Start Booming 💣 ]------")
     FetchUp()
-    setInterval(refreshLink, 1000 * 60 * 5)
   })
 }
 StartInit()
